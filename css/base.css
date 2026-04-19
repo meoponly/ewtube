@@ -1,1 +1,95 @@
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f0f0f;
+  --surface:#1f1f1f;
+  --surface2:#272727;
+  --surface3:#3f3f3f;
+  --border:#3f3f3f;
+  --accent:#ff0000;
+  --text:#f1f1f1;
+  --text2:#aaaaaa;
+  --text3:#717171;
+  --radius:12px;
+  --header-h:56px;
+  --sidebar-w:240px;
+}
+/* ── YT LOADING BAR ── */
+#yt-loading-bar{
+  position:fixed;top:0;left:0;height:2px;width:0%;
+  background:#ff0000;z-index:9999;pointer-events:none;
+  opacity:0;
+  box-shadow:0 0 6px 1px rgba(255,0,0,0.5);
+  will-change:width,opacity;
+}
+#yt-loading-bar::after{
+  content:'';position:absolute;right:0;top:0;
+  width:80px;height:100%;
+  background:linear-gradient(to right,transparent,rgba(255,120,120,0.6));
+}
 
+/* ── SEARCH SKELETON ── */
+.search-skel-card{display:flex;gap:16px;padding:8px 0;margin-bottom:8px}
+.search-skel-thumb{width:246px;min-width:246px;aspect-ratio:16/9;border-radius:10px;flex-shrink:0}
+.search-skel-info{flex:1;display:flex;flex-direction:column;gap:10px;padding-top:4px}
+.search-skel-title{height:18px;border-radius:4px;width:90%}
+.search-skel-title2{height:18px;border-radius:4px;width:70%}
+.search-skel-meta{height:13px;border-radius:4px;width:40%}
+.search-skel-ch{height:13px;border-radius:4px;width:30%}
+
+/* ── HISTORY SKELETON ── */
+.history-skel-item{display:flex;gap:16px;padding:10px 8px;margin-bottom:4px}
+.history-skel-thumb{width:min(360px,38vw);min-width:min(240px,38vw);aspect-ratio:16/9;border-radius:10px;flex-shrink:0}
+.history-skel-info{flex:1;display:flex;flex-direction:column;gap:10px;padding-top:6px}
+.history-skel-title{height:20px;border-radius:4px;width:85%}
+.history-skel-title2{height:20px;border-radius:4px;width:65%}
+.history-skel-meta{height:13px;border-radius:4px;width:35%}
+.history-skel-ch{height:13px;border-radius:4px;width:28%}
+
+/* ── SEARCH HISTORY ── */
+.search-history-section{margin-top:20px;border-top:1px solid var(--border);padding-top:14px}
+.search-history-label{font-size:11px;font-weight:600;letter-spacing:.06em;color:var(--text3);text-transform:uppercase;margin-bottom:10px;padding:0 4px}
+.search-history-item{
+  display:flex;align-items:center;gap:10px;
+  padding:8px 10px;border-radius:8px;cursor:pointer;
+  transition:background .1s;color:var(--text2);font-size:14px;
+}
+.search-history-item:hover{background:rgba(255,255,255,.07);color:var(--text)}
+body.light-mode .search-history-item:hover{background:rgba(0,0,0,.05)}
+.search-history-item .ms{font-size:18px;color:var(--text3);flex-shrink:0}
+.search-history-item span{flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.search-history-del{
+  width:26px;height:26px;border-radius:50%;
+  display:none;align-items:center;justify-content:center;
+  color:var(--text3);background:none;border:none;cursor:pointer;
+  transition:background .1s,color .1s;flex-shrink:0;
+}
+.search-history-item:hover .search-history-del{display:flex}
+.search-history-del:hover{background:rgba(255,255,255,.12);color:var(--text)}
+.search-history-del .ms{font-size:16px}
+.search-history-empty{font-size:13px;color:var(--text3);padding:6px 4px;font-style:italic}
+
+/* ── LIGHT THEME ── */
+body.light-mode{
+  --bg:#ffffff;
+  --surface:#f2f2f2;
+  --surface2:#e5e5e5;
+  --surface3:#d0d0d0;
+  --border:#e0e0e0;
+  --accent:#ff0000;
+  --text:#0f0f0f;
+  --text2:#606060;
+  --text3:#909090;
+}
+body.light-mode #top-header{background:#ffffff;border-bottom:none}
+body.light-mode .search-input-wrap{background:#ffffff;border-color:#ccc}
+body.light-mode .search-input-wrap:focus-within{border-color:#1c62b9;background:#fff}
+body.light-mode #header-search input{color:#0f0f0f}
+body.light-mode .search-btn{background:#f8f8f8;border-color:#ccc;color:#0f0f0f}
+body.light-mode .search-btn:hover{background:#e8e8e8}
+body.light-mode .hdr-btn:hover{background:rgba(0,0,0,.08)}
+body.light-mode #sidebar{background:#ffffff}
+body.light-mode .sb-item:hover,.light-mode .sb-ch-item:hover{background:rgba(0,0,0,.07)}
+body.light-mode .sb-item.active{background:rgba(0,0,0,.08)}
+body.light-mode .ctx-menu{background:#ffffff;box-shadow:0 8px 24px rgba(0,0,0,.2)}
+body.light-mode .ctx-item:hover{background:rgba(0,0,0,.06)}
+body.light-mode .ctx-divider{background:#e0e0e0}
