@@ -3,9 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <script>
-  // GitHub Pages 404 trick — redirect to index.html with the path as a query param
+  // GitHub Pages 404 fix
+  // Redirects /ewtube/history → /ewtube/?r=/ewtube/history
+  const base = '/ewtube/';
   const path = window.location.pathname;
-  window.location.replace('/?r=' + encodeURIComponent(path));
+  const search = window.location.search;
+  window.location.replace(base + '?r=' + encodeURIComponent(path + search));
 </script>
 </head>
 <body></body>
