@@ -1,0 +1,79 @@
+<div id="search-section">
+    <!-- HOME FEED (shown when no search active) -->
+    <div id="home-feed-wrap">
+      <!-- CONTINUE WATCHING -->
+      <div id="cw-section-wrap" style="display:none" class="cw-section"></div>
+      <div id="pinned-section-wrap" style="display:none">
+        <div class="pinned-section">
+          <div class="pinned-section-title"><span class="ms sz20">push_pin</span><span>Pinned Playlists</span></div>
+          <div class="pinned-pl-row" id="pinned-pl-row"></div>
+        </div>
+      </div>
+      <div class="ch-chips-row-wrap" id="home-chips-wrap" style="display:none">
+        <div class="ch-chips-scroll" id="home-chips-scroll"></div>
+      </div>
+      <div class="section-title" id="home-feed-title" style="display:none;margin-bottom:16px">Latest from your subscriptions</div>
+      <div id="home-feed"></div>
+      <div class="load-more-wrap" id="home-load-more" style="display:none">
+        <button class="load-more-btn" onclick="loadMoreHome()">Load more</button>
+      </div>
+    </div>
+    <!-- SEARCH RESULTS (shown when searching) -->
+    <div id="search-results-wrap" style="display:none">
+      <!-- YT-style filter bar -->
+      <div id="filter-bar" style="display:none">
+        <div class="yt-filter-bar">
+          <button class="yt-filter-chip active" data-filter="all" onclick="setSearchFilter('all')">All</button>
+          <button class="yt-filter-chip" data-filter="videos" onclick="setSearchFilter('videos')">Videos</button>
+          <button class="yt-filter-chip" data-filter="channels" onclick="setSearchFilter('channels')">Channels</button>
+          <button class="yt-filter-chip" data-filter="recent" onclick="setSearchFilter('recent')">Recently uploaded</button>
+          <button class="yt-filter-chip" data-filter="live" onclick="setSearchFilter('live')">Live</button>
+          <div class="yt-filter-divider"></div>
+          <button class="yt-filter-btn" id="yt-filter-btn" onclick="toggleFilterPanel()">
+            <svg height="16" viewBox="0 0 24 24" width="16" style="display:block;fill:currentColor">
+              <path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"/>
+            </svg>
+            Filters
+          </button>
+        </div>
+        <!-- Channel filter chips row -->
+        <div class="ch-filter-chips-row" id="ch-filter-chips-row" style="display:none"></div>
+        <!-- Filter panel dropdown -->
+        <div id="yt-filter-panel" class="yt-filter-panel">
+          <div class="yt-fp-col">
+            <div class="yt-fp-head">Upload date</div>
+            <label class="yt-fp-opt"><input type="radio" name="fp-date" value="" checked onchange="applyFilterPanel()"><span>Any time</span></label>
+            <label class="yt-fp-opt"><input type="radio" name="fp-date" value="today" onchange="applyFilterPanel()"><span>Today</span></label>
+            <label class="yt-fp-opt"><input type="radio" name="fp-date" value="week" onchange="applyFilterPanel()"><span>This week</span></label>
+            <label class="yt-fp-opt"><input type="radio" name="fp-date" value="month" onchange="applyFilterPanel()"><span>This month</span></label>
+            <label class="yt-fp-opt"><input type="radio" name="fp-date" value="year" onchange="applyFilterPanel()"><span>This year</span></label>
+          </div>
+          <div class="yt-fp-col">
+            <div class="yt-fp-head">Duration</div>
+            <label class="yt-fp-opt"><input type="radio" name="fp-dur" value="" checked onchange="applyFilterPanel()"><span>Any duration</span></label>
+            <label class="yt-fp-opt"><input type="radio" name="fp-dur" value="short" onchange="applyFilterPanel()"><span>Under 4 minutes</span></label>
+            <label class="yt-fp-opt"><input type="radio" name="fp-dur" value="medium" onchange="applyFilterPanel()"><span>4–20 minutes</span></label>
+            <label class="yt-fp-opt"><input type="radio" name="fp-dur" value="long" onchange="applyFilterPanel()"><span>Over 20 minutes</span></label>
+          </div>
+          <div class="yt-fp-col">
+            <div class="yt-fp-head">Sort by</div>
+            <label class="yt-fp-opt"><input type="radio" name="fp-sort" value="relevance" checked onchange="applyFilterPanel()"><span>Relevance</span></label>
+            <label class="yt-fp-opt"><input type="radio" name="fp-sort" value="date" onchange="applyFilterPanel()"><span>Upload date</span></label>
+            <label class="yt-fp-opt"><input type="radio" name="fp-sort" value="viewCount" onchange="applyFilterPanel()"><span>View count</span></label>
+            <label class="yt-fp-opt"><input type="radio" name="fp-sort" value="rating" onchange="applyFilterPanel()"><span>Rating</span></label>
+          </div>
+          <div class="yt-fp-col">
+            <div class="yt-fp-head">Features</div>
+            <label class="yt-fp-opt"><input type="checkbox" name="fp-4k" onchange="applyFilterPanel()"><span>4K</span></label>
+            <label class="yt-fp-opt"><input type="checkbox" name="fp-hd" onchange="applyFilterPanel()"><span>HD</span></label>
+            <label class="yt-fp-opt"><input type="checkbox" name="fp-cc" onchange="applyFilterPanel()"><span>Subtitles/CC</span></label>
+          </div>
+        </div>
+      </div>
+      <div class="status-txt" id="search-status"></div>
+      <div id="search-results"></div>
+      <div class="load-more-wrap" id="search-more" style="display:none">
+        <button class="load-more-btn" onclick="loadMoreSearch()">Load more</button>
+      </div>
+    </div>
+  </div>

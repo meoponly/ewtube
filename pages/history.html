@@ -1,0 +1,23 @@
+<div id="history-section">
+    <div class="section-title" style="margin-bottom:18px">Watch History</div>
+    <div class="history-page-wrap">
+      <div class="history-main">
+        <div id="history-list"></div>
+      </div>
+      <div class="history-sidebar">
+        <div class="history-sidebar-search">
+          <span class="ms sz20">search</span>
+          <input type="text" placeholder="Search watch history" id="history-search-input" oninput="filterHistory(this.value)"/>
+        </div>
+        <div class="history-sidebar-clear" onclick="clearHistory()">
+          <span class="ms">delete</span>
+          Clear all watch history
+        </div>
+        <!-- SEARCH HISTORY -->
+        <div class="search-history-section" id="search-history-section">
+          <div class="search-history-label">Search history</div>
+          <div id="search-history-list"></div>
+        </div>
+      </div>
+    </div>
+  </div>

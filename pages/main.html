@@ -1,0 +1,185 @@
+<div id="main">
+<!-- ═══ CHANNEL-PAGE ═══ -->
+<div id="channel-page" style="display:none">
+    <button class="ch-back-btn" onclick="goBack()"><span class="ms">arrow_back</span></button>
+    <div class="ch-banner" id="ch-banner"><img id="ch-banner-img" src="" alt="" style="display:none"/></div>
+    <div class="ch-page-top">
+      <div class="ch-page-pfp" id="ch-page-pfp">
+        <span id="ch-page-initials"></span>
+        <img id="ch-page-pfp-img" src="" alt="" style="display:none"/>
+      </div>
+      <div class="ch-page-info">
+        <div class="ch-page-name-row">
+          <div class="ch-page-name" id="ch-page-name"></div>
+          <span class="ch-verified-badge" id="ch-verified-badge" style="display:none" title="Verified">
+            <svg height="16" viewBox="0 0 24 24" width="16" style="fill:var(--text2)"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+          </span>
+        </div>
+        <div class="ch-page-handle" id="ch-page-handle"></div>
+        <div class="ch-page-meta-row">
+          <span class="ch-page-subs" id="ch-page-subs"></span>
+          <span class="ch-page-vidcount" id="ch-page-vidcount"></span>
+        </div>
+        <div class="ch-page-actions">
+          <div class="ch-sub-wrap" id="ch-sub-wrap">
+            <button id="ch-subscribe-btn" class="ch-subscribe-btn" onclick="toggleSubscribeCurrentChannel()">
+              <span id="ch-subscribe-label">Subscribe</span>
+            </button>
+          </div>
+          <button id="ch-notif-btn" class="ch-notif-btn" onclick="toggleChNotifCurrent()" title="Notification settings" style="display:none">
+            <span class="ms ch-notif-icon" id="ch-notif-icon">notifications_none</span>
+          </button>
+          <button id="ch-hide-btn" onclick="toggleHideCurrentChannel()" style="display:none;align-items:center;gap:6px;padding:6px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;transition:background .15s">
+            <span class="ms sz16" id="ch-hide-icon">visibility_off</span>
+            <span id="ch-hide-label">Hide from Home</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="ch-tabs" id="ch-tabs">
+      <div class="ch-tab active" data-tab="home" onclick="chTab('home')">Home</div>
+      <div class="ch-tab" data-tab="videos" onclick="chTab('videos')">Videos</div>
+      <div class="ch-tab" data-tab="playlists" onclick="chTab('playlists')">Playlists</div>
+
+      <div class="ch-tab" data-tab="about" onclick="chTab('about')">About</div>
+    </div>
+    <div id="ch-home-panel"></div>
+    <div id="ch-videos-panel" style="display:none"></div>
+    <div id="ch-playlists-panel" style="display:none"></div>
+
+    <div id="ch-about-panel" style="display:none"></div>
+  </div>
+
+<!-- ═══ HOME-SEARCH ═══ -->
+<div id="search-section">
+    <!-- HOME FEED (shown when no search active) -->
+    <div id="home-feed-wrap">
+      <!-- CONTINUE WATCHING -->
+      <div id="cw-section-wrap" style="display:none" class="cw-section"></div>
+      <div id="pinned-section-wrap" style="display:none">
+        <div class="pinned-section">
+          <div class="pinned-section-title"><span class="ms sz20">push_pin</span><span>Pinned Playlists</span></div>
+          <div class="pinned-pl-row" id="pinned-pl-row"></div>
+        </div>
+      </div>
+      <div class="ch-chips-row-wrap" id="home-chips-wrap" style="display:none">
+        <div class="ch-chips-scroll" id="home-chips-scroll"></div>
+      </div>
+      <div class="section-title" id="home-feed-title" style="display:none;margin-bottom:16px">Latest from your subscriptions</div>
+      <div id="home-feed"></div>
+      <div class="load-more-wrap" id="home-load-more" style="display:none">
+        <button class="load-more-btn" onclick="loadMoreHome()">Load more</button>
+      </div>
+    </div>
+    <!-- SEARCH RESULTS (shown when searching) -->
+    <div id="search-results-wrap" style="display:none">
+      <!-- YT-style filter bar -->
+      <div id="filter-bar" style="display:none">
+        <div class="yt-filter-bar">
+          <button class="yt-filter-chip active" data-filter="all" onclick="setSearchFilter('all')">All</button>
+          <button class="yt-filter-chip" data-filter="videos" onclick="setSearchFilter('videos')">Videos</button>
+          <button class="yt-filter-chip" data-filter="channels" onclick="setSearchFilter('channels')">Channels</button>
+          <button class="yt-filter-chip" data-filter="recent" onclick="setSearchFilter('recent')">Recently uploaded</button>
+          <button class="yt-filter-chip" data-filter="live" onclick="setSearchFilter('live')">Live</button>
+          <div class="yt-filter-divider"></div>
+          <button class="yt-filter-btn" id="yt-filter-btn" onclick="toggleFilterPanel()">
+            <svg height="16" viewBox="0 0 24 24" width="16" style="display:block;fill:currentColor">
+              <path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"/>
+            </svg>
+            Filters
+          </button>
+        </div>
+        <!-- Channel filter chips row -->
+        <div class="ch-filter-chips-row" id="ch-filter-chips-row" style="display:none"></div>
+        <!-- Filter panel dropdown -->
+        <div id="yt-filter-panel" class="yt-filter-panel">
+          <div class="yt-fp-col">
+            <div class="yt-fp-head">Upload date</div>
+            <label class="yt-fp-opt"><input type="radio" name="fp-date" value="" checked onchange="applyFilterPanel()"><span>Any time</span></label>
+            <label class="yt-fp-opt"><input type="radio" name="fp-date" value="today" onchange="applyFilterPanel()"><span>Today</span></label>
+            <label class="yt-fp-opt"><input type="radio" name="fp-date" value="week" onchange="applyFilterPanel()"><span>This week</span></label>
+            <label class="yt-fp-opt"><input type="radio" name="fp-date" value="month" onchange="applyFilterPanel()"><span>This month</span></label>
+            <label class="yt-fp-opt"><input type="radio" name="fp-date" value="year" onchange="applyFilterPanel()"><span>This year</span></label>
+          </div>
+          <div class="yt-fp-col">
+            <div class="yt-fp-head">Duration</div>
+            <label class="yt-fp-opt"><input type="radio" name="fp-dur" value="" checked onchange="applyFilterPanel()"><span>Any duration</span></label>
+            <label class="yt-fp-opt"><input type="radio" name="fp-dur" value="short" onchange="applyFilterPanel()"><span>Under 4 minutes</span></label>
+            <label class="yt-fp-opt"><input type="radio" name="fp-dur" value="medium" onchange="applyFilterPanel()"><span>4–20 minutes</span></label>
+            <label class="yt-fp-opt"><input type="radio" name="fp-dur" value="long" onchange="applyFilterPanel()"><span>Over 20 minutes</span></label>
+          </div>
+          <div class="yt-fp-col">
+            <div class="yt-fp-head">Sort by</div>
+            <label class="yt-fp-opt"><input type="radio" name="fp-sort" value="relevance" checked onchange="applyFilterPanel()"><span>Relevance</span></label>
+            <label class="yt-fp-opt"><input type="radio" name="fp-sort" value="date" onchange="applyFilterPanel()"><span>Upload date</span></label>
+            <label class="yt-fp-opt"><input type="radio" name="fp-sort" value="viewCount" onchange="applyFilterPanel()"><span>View count</span></label>
+            <label class="yt-fp-opt"><input type="radio" name="fp-sort" value="rating" onchange="applyFilterPanel()"><span>Rating</span></label>
+          </div>
+          <div class="yt-fp-col">
+            <div class="yt-fp-head">Features</div>
+            <label class="yt-fp-opt"><input type="checkbox" name="fp-4k" onchange="applyFilterPanel()"><span>4K</span></label>
+            <label class="yt-fp-opt"><input type="checkbox" name="fp-hd" onchange="applyFilterPanel()"><span>HD</span></label>
+            <label class="yt-fp-opt"><input type="checkbox" name="fp-cc" onchange="applyFilterPanel()"><span>Subtitles/CC</span></label>
+          </div>
+        </div>
+      </div>
+      <div class="status-txt" id="search-status"></div>
+      <div id="search-results"></div>
+      <div class="load-more-wrap" id="search-more" style="display:none">
+        <button class="load-more-btn" onclick="loadMoreSearch()">Load more</button>
+      </div>
+    </div>
+  </div>
+
+<!-- ═══ HISTORY ═══ -->
+<div id="history-section">
+    <div class="section-title" style="margin-bottom:18px">Watch History</div>
+    <div class="history-page-wrap">
+      <div class="history-main">
+        <div id="history-list"></div>
+      </div>
+      <div class="history-sidebar">
+        <div class="history-sidebar-search">
+          <span class="ms sz20">search</span>
+          <input type="text" placeholder="Search watch history" id="history-search-input" oninput="filterHistory(this.value)"/>
+        </div>
+        <div class="history-sidebar-clear" onclick="clearHistory()">
+          <span class="ms">delete</span>
+          Clear all watch history
+        </div>
+        <!-- SEARCH HISTORY -->
+        <div class="search-history-section" id="search-history-section">
+          <div class="search-history-label">Search history</div>
+          <div id="search-history-list"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- ═══ WATCHLATER ═══ -->
+<div id="watchlater-section" style="display:none">
+    <div class="wl-header">
+      <div class="section-title" style="margin:0">Watch Later</div>
+      <button class="wl-clear-btn" onclick="clearWatchLater()">Clear all</button>
+    </div>
+    <div class="wl-sort-bar">
+      <span>Sort:</span>
+      <button class="wl-sort-pill active" id="wl-sort-date" onclick="setWLSort('date')">Date added</button>
+      <button class="wl-sort-pill" id="wl-sort-channel" onclick="setWLSort('channel')">Channel</button>
+    </div>
+    <div id="wl-list"></div>
+  </div>
+
+<!-- ═══ MYPLAYLISTS ═══ -->
+<div id="myplaylists-section">
+    <div class="mpl-header">
+      <div class="section-title" style="margin:0">Playlists</div>
+      <button class="new-pl-btn" onclick="showNewPlaylistModal()">
+        <span class="ms">add</span>New playlist
+      </button>
+    </div>
+    <div id="mpl-grid-wrap"></div>
+  </div>
+
+</main>
+</div>

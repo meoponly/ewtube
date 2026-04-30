@@ -1,0 +1,12 @@
+<div id="watchlater-section" style="display:none">
+    <div class="wl-header">
+      <div class="section-title" style="margin:0">Watch Later</div>
+      <button class="wl-clear-btn" onclick="clearWatchLater()">Clear all</button>
+    </div>
+    <div class="wl-sort-bar">
+      <span>Sort:</span>
+      <button class="wl-sort-pill active" id="wl-sort-date" onclick="setWLSort('date')">Date added</button>
+      <button class="wl-sort-pill" id="wl-sort-channel" onclick="setWLSort('channel')">Channel</button>
+    </div>
+    <div id="wl-list"></div>
+  </div>

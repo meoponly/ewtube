@@ -1,0 +1,43 @@
+<nav id="sidebar">
+  <!-- Home -->
+  <div class="sb-section">
+    <div class="sb-item active" id="nav-home" onclick="goHome()">
+      <span class="ms filled">home</span><span>Home</span>
+    </div>
+  </div>
+  <div class="sb-section-divider"></div>
+  <!-- Subscriptions -->
+  <div class="sb-section" id="sb-channels-section">
+    <div class="sb-section-header" id="subs-header">
+      <span style="flex:1">Subscriptions</span>
+      <button onclick="event.stopPropagation();openAddChannelModal()" title="Add channel" style="width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--text3);background:none;border:none;cursor:pointer;transition:background .15s;flex-shrink:0" onmouseover="this.style.background='rgba(255,255,255,.1)'" onmouseout="this.style.background='none'">
+        <span class="ms" style="font-size:20px">add</span>
+      </button>
+      <button onclick="event.stopPropagation();openManageChannels()" title="Manage subscriptions" style="width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--text3);background:none;border:none;cursor:pointer;transition:background .15s;flex-shrink:0" onmouseover="this.style.background='rgba(255,255,255,.1)'" onmouseout="this.style.background='none'">
+        <span class="ms" style="font-size:20px">chevron_right</span>
+      </button>
+    </div>
+    <div id="sb-channels-wrap">
+      <div id="sb-channels"></div>
+    </div>
+  </div>
+  <div class="sb-section-divider"></div>
+  <!-- You -->
+  <div class="sb-section">
+    <div class="sb-section-header expanded" id="you-header" onclick="toggleYouSection()">
+      <span>You</span>
+      <span class="ms">chevron_right</span>
+    </div>
+    <div id="you-section-wrap">
+      <div class="sb-item" id="nav-history" onclick="showSection('history')">
+        <span class="ms">history</span><span>History</span>
+      </div>
+      <div class="sb-item" id="nav-watchlater" onclick="showSection('watchlater')">
+        <span class="ms">watch_later</span><span>Watch later</span>
+      </div>
+      <div class="sb-item" id="nav-myplaylists" onclick="showSection('myplaylists')">
+        <span class="ms">video_library</span><span>Playlists</span>
+      </div>
+    </div>
+  </div>
+</nav>

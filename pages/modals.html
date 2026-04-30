@@ -1,0 +1,215 @@
+<div id="settings-modal" style="display:none" onclick="if(event.target===this)closeSettings()">
+  <div class="settings-box">
+    <div class="settings-header">
+      <h3><span class="ms sz20">settings</span>Settings</h3>
+      <button class="settings-close" onclick="closeSettings()"><span class="ms sz20">close</span></button>
+    </div>
+    <div class="settings-body">
+
+      <!-- FOCUS MODE -->
+      <div class="settings-section-label">Focus Mode</div>
+      <div id="focus-mode-banner"><span class="ms">lock</span><span>Focus Mode active — <span id="focus-mode-timer"></span></span></div>
+      <div id="focus-mode-row" class="focus-mode-row">
+        <div class="focus-mode-row-info">
+          <div class="focus-mode-row-title"><span class="ms sz18">visibility_off</span>Focus Mode (24h)</div>
+          <div class="focus-mode-row-desc">Lock YouTube to subscribed channels only. No outside videos, no channel search, no new subscriptions.</div>
+        </div>
+        <label class="focus-toggle-switch">
+          <input type="checkbox" id="focus-mode-toggle" onchange="if(this.checked)enableFocusMode();else{this.checked=true;showToast('🔒 Focus Mode stays on until the 24h timer expires');}"/>
+          <span class="focus-toggle-slider"></span>
+        </label>
+      </div>
+
+      <hr class="settings-divider"/>
+
+      <!-- API KEYS -->
+      <div class="settings-section-label">YouTube Data API Keys</div>
+      <div class="apikey-add-row">
+        <input type="password" id="new-apikey-input" placeholder="Paste API key here…" autocomplete="off" onkeydown="if(event.key==='Enter')addApiKey()"/>
+        <button onclick="addApiKey()">Add Key</button>
+      </div>
+      <div class="apikey-list" id="apikey-list"></div>
+      <div id="apikey-status-bar" class="apikey-status" style="display:none"></div>
+
+      <hr class="settings-divider"/>
+
+      <!-- CHANNEL RESOLUTION -->
+      <div class="settings-section-label">Channel Resolution</div>
+      <div id="resolve-status" style="font-size:12px;color:var(--text3);line-height:1.8;margin-bottom:10px"></div>
+      <button id="re-resolve-btn" onclick="reResolveChannels()" style="padding:8px 16px;background:var(--surface2);border:1px solid var(--border);color:var(--text);border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;transition:background .15s" onmouseover="this.style.background='var(--surface3)'" onmouseout="this.style.background='var(--surface2)'">&#x1F504; Re-resolve unresolved channels</button>
+      <div style="font-size:11px;color:var(--text3);margin-top:6px">Tip: paste a raw Channel ID (starts with UC…) to skip the quota-heavy search call.</div>
+
+      <hr class="settings-divider"/>
+
+      <!-- BLOCKED KEYWORDS -->
+      <div class="settings-section-label">Blocked Keywords</div>
+      <div style="font-size:12px;color:var(--text3);margin-bottom:10px;line-height:1.6">
+        Keywords are <strong style="color:var(--accent)">permanent and cannot be removed</strong>. Any video, channel, or search containing these words will be completely hidden. Min 3 characters.
+      </div>
+      <div class="apikey-add-row" style="margin-top:10px">
+        <input type="text" id="new-keyword-input" placeholder="e.g. gaming, music, prank…" autocomplete="off" onkeydown="if(event.key==='Enter')addKeywordFromSettings()"/>
+        <button onclick="addKeywordFromSettings()">Block</button>
+      </div>
+      <div id="keyword-add-error" style="font-size:12px;color:var(--accent);min-height:16px;margin-top:-8px;margin-bottom:10px"></div>
+      <div id="blocked-keywords-list"></div>
+
+      <hr class="settings-divider"/>
+
+      <!-- HOW IT WORKS -->
+      <div class="settings-section-label">How it works</div>
+      <div style="font-size:12px;color:var(--text3);line-height:1.8">
+        Keys are saved in <strong style="color:var(--text2)">localStorage</strong> and never sent anywhere except YouTube's API.<br>
+        When a key hits its daily quota, the app <strong style="color:var(--text2)">automatically switches</strong> to the next key and retries.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- New Playlist Modal -->
+<div id="modal-overlay" class="modal-overlay" style="display:none" onclick="if(event.target===this)hideNewPlaylistModal()">
+  <div class="modal-box">
+    <h3>New playlist</h3>
+    <input class="modal-input" id="modal-pl-name" type="text" placeholder="Playlist title" autocomplete="off" maxlength="150"
+      onkeydown="if(event.key==='Enter')createPlaylist()"/>
+    <div class="modal-actions">
+      <button class="modal-cancel" onclick="hideNewPlaylistModal()">Cancel</button>
+      <button class="modal-create" onclick="createPlaylist()">Create</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Channel Modal -->
+<div id="add-channel-modal" class="modal-overlay" style="display:none" onclick="if(event.target===this)closeAddChannelModal()">
+  <div class="modal-box">
+    <h3>Add Channel to Sidebar</h3>
+    <input class="modal-input" id="add-channel-input" type="text" placeholder="Channel name or @handle…" autocomplete="off" maxlength="100"
+      onkeydown="if(event.key==='Enter')addChannelFromModal()"/>
+    <div id="add-channel-status" style="font-size:12px;color:var(--text3);min-height:18px;margin-top:-8px;margin-bottom:12px"></div>
+    <div class="modal-actions">
+      <button class="modal-cancel" onclick="closeAddChannelModal()">Cancel</button>
+      <button class="modal-create" id="add-channel-btn" onclick="addChannelFromModal()">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- Context Menu -->
+<div id="ctx-menu" class="ctx-menu" style="display:none"></div>
+
+
+<!-- DESCRIPTION FLOATING PANEL -->
+<div id="desc-panel-overlay" onclick="if(event.target===this)closeDescPanel()">
+  <div id="desc-panel">
+    <div class="desc-panel-header">
+      <div class="desc-panel-title" id="desc-panel-title"></div>
+      <button class="desc-panel-close" onclick="closeDescPanel()"><span class="ms sz20">close</span></button>
+    </div>
+    <div class="desc-panel-body" id="desc-panel-body"></div>
+  </div>
+</div>
+
+<!-- MANAGE CHANNELS PANEL -->
+<div id="manage-channels-overlay" onclick="closeManageChannels()"></div>
+<div id="manage-channels-panel">
+  <div class="mcp-header">
+    <button class="mcp-close" onclick="closeManageChannels()"><span class="ms">arrow_back</span></button>
+    <h3>Manage Subscriptions</h3>
+    <button onclick="openAddChannelModal()" title="Add channel" style="width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--text2);background:none;border:none;cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(255,255,255,.1)'" onmouseout="this.style.background='none'">
+      <span class="ms">add</span>
+    </button>
+  </div>
+  <div class="mcp-list" id="mcp-list"></div>
+</div>
+<!-- PLAYLIST PICKER POPUP (drag-drop) -->
+<div id="pl-picker-popup">
+  <div class="pl-picker-header">
+    <span>Add to playlist</span>
+    <button class="pl-picker-close" onclick="closePlPicker()"><span class="ms sz18">close</span></button>
+  </div>
+  <div class="pl-picker-list" id="pl-picker-list"></div>
+</div>
+
+<!-- ═══════════ ADMIN PANEL ═══════════ -->
+<div id="admin-overlay" onclick="if(event.target===this)closeAdmin()">
+  <div id="admin-panel">
+    <div class="adm-header">
+      <div class="adm-header-title">
+        <span class="ms" style="color:#e53935">admin_panel_settings</span>
+        Admin Dashboard
+        <span class="adm-badge">SECRET</span>
+      </div>
+      <button class="adm-close" onclick="closeAdmin()"><span class="ms sz20">close</span></button>
+    </div>
+    <div class="adm-tabs">
+      <button class="adm-tab active" onclick="admTab('history')"><span class="ms" style="font-size:15px;margin-right:5px">history</span>Watch History</button>
+      <button class="adm-tab" onclick="admTab('searches')"><span class="ms" style="font-size:15px;margin-right:5px">search</span>Search History</button>
+      <button class="adm-tab" onclick="admTab('api')"><span class="ms" style="font-size:15px;margin-right:5px">key</span>API Usage</button>
+      <button class="adm-tab" onclick="admTab('access')"><span class="ms" style="font-size:15px;margin-right:5px">lock</span>Channel Access</button>
+    </div>
+    <div class="adm-body">
+      <!-- HISTORY TAB -->
+      <div class="adm-tab-content active" id="adm-tab-history">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+          <div class="adm-section-title" style="margin:0">Full Watch History Archive</div>
+          <button class="adm-clear-btn" onclick="admClearHistory()">Clear Archive</button>
+        </div>
+        <div id="adm-hist-list"></div>
+      </div>
+      <!-- SEARCH HISTORY TAB -->
+      <div class="adm-tab-content" id="adm-tab-searches">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+          <div class="adm-section-title" style="margin:0">Full Search History Archive</div>
+          <button class="adm-clear-btn" onclick="admClearSearch()">Clear Archive</button>
+        </div>
+        <div id="adm-search-list"></div>
+      </div>
+      <!-- API USAGE TAB -->
+      <div class="adm-tab-content" id="adm-tab-api">
+        <div class="adm-section-title">Overview</div>
+        <div class="adm-stat-row" id="adm-api-stats"></div>
+        <div class="adm-section-title">Usage by Key</div>
+        <div id="adm-key-list"></div>
+        <div class="adm-section-title" style="margin-top:16px">Call Activity (last 50)</div>
+        <div class="adm-card" style="padding:12px 16px">
+          <div class="adm-chart-wrap"><svg id="adm-chart-svg" viewBox="0 0 500 80" preserveAspectRatio="none"></svg></div>
+        </div>
+      </div>
+      <!-- CHANNEL ACCESS TAB -->
+      <div class="adm-tab-content" id="adm-tab-access">
+        <div class="adm-section-title">Channel Access Control</div>
+        <p style="font-size:13px;color:var(--text3);margin:0 0 14px">Block channels so they're hidden from the main UI. Toggle back to allow access. Blocked channels are invisible to normal users.</p>
+        <div style="display:flex;gap:8px;margin-bottom:14px">
+          <input id="adm-block-input" placeholder="Channel name to block…" style="flex:1;padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:13px;outline:none" />
+          <button onclick="admBlockChannel()" style="padding:8px 16px;border-radius:8px;background:var(--accent);color:#fff;border:none;font-size:13px;font-weight:600;cursor:pointer">Block</button>
+        </div>
+        <div id="adm-ch-list"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- KEYBOARD SHORTCUTS MODAL -->
+<div id="shortcuts-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:700;align-items:center;justify-content:center">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;width:min(480px,92vw);padding:28px 28px 24px;position:relative;box-shadow:0 24px 60px rgba(0,0,0,.5)">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:22px">
+      <span class="ms" style="font-size:22px;color:var(--accent)">keyboard</span>
+      <span style="font-size:17px;font-weight:600;color:var(--text)">Keyboard Shortcuts</span>
+      <button onclick="closeShortcuts()" style="margin-left:auto;background:none;border:none;cursor:pointer;color:var(--text2);padding:4px"><span class="ms sz20">close</span></button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:0">
+      <div style="font-size:11px;font-weight:600;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border)">Navigation</div>
+      <div class="sc-row"><span class="sc-key">Esc</span><span class="sc-desc">Close any open modal, menu or panel</span></div>
+      <div style="font-size:11px;font-weight:600;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin:14px 0 8px;padding-bottom:6px;border-bottom:1px solid var(--border)">Video Cards <span style="font-weight:400;font-size:10px;opacity:.6">(hover over a card first)</span></div>
+      <div class="sc-row"><span class="sc-keys"><span class="sc-key">Ctrl</span><span class="sc-plus">+</span><span class="sc-key">B</span></span><span class="sc-desc">Open description / info panel</span></div>
+      <div class="sc-row"><span class="sc-keys"><span class="sc-key">Ctrl</span><span class="sc-plus">+</span><span class="sc-key">Y</span></span><span class="sc-desc">Toggle ✓ tick mark on thumbnail</span></div>
+      <div style="font-size:11px;font-weight:600;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin:14px 0 8px;padding-bottom:6px;border-bottom:1px solid var(--border)">App</div>
+      <div class="sc-row"><span class="sc-keys"><span class="sc-key">Ctrl</span><span class="sc-plus">+</span><span class="sc-key">I</span></span><span class="sc-desc">Open Settings <span style="opacity:.55;font-size:11px">(hover Settings item in profile menu)</span></span></div>
+      <div class="sc-row"><span class="sc-keys"><span class="sc-key">Ctrl</span><span class="sc-plus">+</span><span class="sc-key">M</span></span><span class="sc-desc">Show this shortcuts panel</span></div>
+      <div class="sc-row"><span class="sc-keys"><span class="sc-key">Ctrl</span><span class="sc-plus">+</span><span class="sc-key">X</span></span><span class="sc-desc">Open Admin panel</span></div>
+    </div>
+    <div style="margin-top:20px;padding-top:14px;border-top:1px solid var(--border);font-size:11px;color:var(--text3);text-align:center">
+      Press <kbd style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-size:11px">Esc</kbd> or <kbd style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-size:11px">Ctrl+M</kbd> to close
+    </div>
+  </div>
+</div>

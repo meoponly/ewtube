@@ -1,0 +1,49 @@
+<div id="channel-page" style="display:none">
+    <button class="ch-back-btn" onclick="goBack()"><span class="ms">arrow_back</span></button>
+    <div class="ch-banner" id="ch-banner"><img id="ch-banner-img" src="" alt="" style="display:none"/></div>
+    <div class="ch-page-top">
+      <div class="ch-page-pfp" id="ch-page-pfp">
+        <span id="ch-page-initials"></span>
+        <img id="ch-page-pfp-img" src="" alt="" style="display:none"/>
+      </div>
+      <div class="ch-page-info">
+        <div class="ch-page-name-row">
+          <div class="ch-page-name" id="ch-page-name"></div>
+          <span class="ch-verified-badge" id="ch-verified-badge" style="display:none" title="Verified">
+            <svg height="16" viewBox="0 0 24 24" width="16" style="fill:var(--text2)"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+          </span>
+        </div>
+        <div class="ch-page-handle" id="ch-page-handle"></div>
+        <div class="ch-page-meta-row">
+          <span class="ch-page-subs" id="ch-page-subs"></span>
+          <span class="ch-page-vidcount" id="ch-page-vidcount"></span>
+        </div>
+        <div class="ch-page-actions">
+          <div class="ch-sub-wrap" id="ch-sub-wrap">
+            <button id="ch-subscribe-btn" class="ch-subscribe-btn" onclick="toggleSubscribeCurrentChannel()">
+              <span id="ch-subscribe-label">Subscribe</span>
+            </button>
+          </div>
+          <button id="ch-notif-btn" class="ch-notif-btn" onclick="toggleChNotifCurrent()" title="Notification settings" style="display:none">
+            <span class="ms ch-notif-icon" id="ch-notif-icon">notifications_none</span>
+          </button>
+          <button id="ch-hide-btn" onclick="toggleHideCurrentChannel()" style="display:none;align-items:center;gap:6px;padding:6px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;transition:background .15s">
+            <span class="ms sz16" id="ch-hide-icon">visibility_off</span>
+            <span id="ch-hide-label">Hide from Home</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="ch-tabs" id="ch-tabs">
+      <div class="ch-tab active" data-tab="home" onclick="chTab('home')">Home</div>
+      <div class="ch-tab" data-tab="videos" onclick="chTab('videos')">Videos</div>
+      <div class="ch-tab" data-tab="playlists" onclick="chTab('playlists')">Playlists</div>
+
+      <div class="ch-tab" data-tab="about" onclick="chTab('about')">About</div>
+    </div>
+    <div id="ch-home-panel"></div>
+    <div id="ch-videos-panel" style="display:none"></div>
+    <div id="ch-playlists-panel" style="display:none"></div>
+
+    <div id="ch-about-panel" style="display:none"></div>
+  </div>
