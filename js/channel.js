@@ -7,6 +7,7 @@ async function openChannel(name){
   ytLoadStart();
   navStack.push({type:'section',section:currentSection});
   currentChannelName=name;currentChTab='home';
+  if(typeof updateURL==='function') updateURL('channel', {name});
   ['search-section','history-section','myplaylists-section','watchlater-section'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none'});
   document.getElementById('channel-page').style.display='block';
   document.querySelectorAll('.sb-item').forEach(el=>el.classList.remove('active'));
@@ -527,6 +528,7 @@ async function loadPlaylists(append){
 }
 
 async function openChPlaylist(plId,plName){
+  if(typeof updateURL==='function') updateURL('playlist', {id:plId, name:plName, ch:currentChannelName});
   const panel=document.getElementById('ch-playlists-panel');
   panel.innerHTML=`<button class="load-more-btn" style="margin-bottom:18px;display:inline-flex;align-items:center;gap:6px" onclick="loadPlaylists(false)"><span class="ms" style="font-size:18px">arrow_back</span> All Playlists</button>
     <div id="ch-pl-detail-wrap"><div style="color:var(--text3);text-align:center;padding:40px">Loading playlist…</div></div>`;

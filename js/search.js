@@ -28,6 +28,7 @@ async function doSearch(){
   }
   // Save to search history
   trackSearchHistory(raw);
+  if(typeof updateURL==='function') updateURL('search', {q: raw});
   searchQuery=raw;searchNextTokenMap={};searchResults=[];searchPlaylists=[];searchChannelResults=[];searchFilter='all';
   window._searchChFilter=null;window._searchChFilterName='';
   document.querySelectorAll('.yt-filter-chip').forEach(b=>b.classList.toggle('active',b.dataset.filter==='all'));
@@ -643,6 +644,7 @@ function searchPlaylistCard(pl,chName,meta){
   </div>`;
 }
 async function openSearchPlaylist(plId,plName,chName){
+  if(typeof updateURL==='function') updateURL('playlist', {id:plId, name:plName, ch:chName});
   openYtPlaylist(plId,plName,()=>{
     document.getElementById('channel-page').style.display='none';
     document.getElementById('search-section').style.display='block';
