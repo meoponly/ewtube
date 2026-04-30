@@ -7,9 +7,9 @@ function goHome(){
   const sr=document.getElementById('search-results');if(sr)sr.innerHTML='';
   const ss=document.getElementById('search-status');if(ss)ss.textContent='';
   const sm=document.getElementById('search-more');if(sm)sm.style.display='none';
-  
   navStack=[];
   showSection('home');
+  updateURL('home');
 }
 
 // ── SEARCH HISTORY ──
@@ -45,7 +45,6 @@ function removeSearchHistory(idx){
 }
 
 // ── SKELETON ──
-// Home/WatchLater/Channel Videos grid: real YT-size ~300px cards
 function skelVidGrid(n){
   return`<div class="vid-grid">${Array(n).fill(0).map(()=>`<div class="vid-card" style="pointer-events:none">
     <div class="skeleton" style="aspect-ratio:16/9;border-radius:10px;width:100%"></div>
@@ -60,7 +59,6 @@ function skelVidGrid(n){
     </div>
   </div>`).join('')}</div>`;
 }
-// Search results: wide horizontal cards (thumb ~38vw, min 240px)
 function skelSearchGrid(n){
   return Array(n).fill(0).map(()=>`<div class="search-skel-card">
     <div class="skeleton search-skel-thumb"></div>
@@ -75,7 +73,6 @@ function skelSearchGrid(n){
     </div>
   </div>`).join('');
 }
-// History: wide horizontal cards same width as search
 function skelHistoryList(n){
   return Array(n).fill(0).map(()=>`<div class="history-skel-item">
     <div class="skeleton history-skel-thumb"></div>
@@ -90,7 +87,6 @@ function skelHistoryList(n){
     </div>
   </div>`).join('');
 }
-// Playlist grid: ~220px cards
 function skelPlaylistGrid(n){
   return`<div class="mpl-grid">${Array(n).fill(0).map(()=>`<div style="border-radius:12px;overflow:hidden;background:var(--surface);border:1px solid var(--border)">
     <div class="skeleton" style="aspect-ratio:16/9;width:100%;border-radius:0"></div>
@@ -100,7 +96,6 @@ function skelPlaylistGrid(n){
     </div>
   </div>`).join('')}</div>`;
 }
-// Channel playlist grid: ~230px cards
 function skelChPlaylistGrid(n){
   return`<div class="pl-grid">${Array(n).fill(0).map(()=>`<div style="border-radius:12px;overflow:hidden">
     <div class="skeleton" style="aspect-ratio:16/9;width:100%;border-radius:12px 12px 0 0"></div>
@@ -128,14 +123,12 @@ function skelChPlaylistGrid(n){
     localStorage.setItem(LS_THEME,isLight?'light':'dark');
     applyTheme(isLight);
   };
-  // Restore focus mode state on load
   if(typeof applyFocusModeUI==='function')applyFocusModeUI();
 })();
 
 // ── NOTIFICATION PANEL ──
 const LS_NOTIF_ITEMS='yt_notif_items_v1';let notifItems=JSON.parse(localStorage.getItem(LS_NOTIF_ITEMS)||'[]');
 function saveNotifItems(){localStorage.setItem(LS_NOTIF_ITEMS,JSON.stringify(notifItems))}
-
 function toggleNotifPanel(){
   const panel=document.getElementById('notif-panel');
   const overlay=document.getElementById('notif-overlay');
@@ -159,7 +152,6 @@ function closeNotifPanel(){
   document.getElementById('notif-bell-btn').classList.remove('active');
 }
 window.closeNotifPanel=closeNotifPanel;
-
 function renderNotifPanel(){
   const body=document.getElementById('notif-panel-body');
   if(!notifItems.length){
@@ -172,7 +164,6 @@ function renderNotifPanel(){
     </div>`;
     return;
   }
-  // Group: today vs older
   const todayStart=new Date();todayStart.setHours(0,0,0,0);
   const todayItems=notifItems.filter(n=>new Date(n.ts)>=todayStart);
   const olderItems=notifItems.filter(n=>new Date(n.ts)<todayStart);
@@ -199,10 +190,8 @@ function notifItemHtml(n){
     ${n.unread?'<div class="notif-unread-dot"></div>':''}
   </a>`;
 }
-
-// Add a notification item (called when home feed loads fresh videos from bell-enabled channels)
 function pushNotifFromFeed(vid,title,channel,thumb,avatar,ts){
-  if(notifItems.some(n=>n.vid===vid))return; // dedupe
+  if(notifItems.some(n=>n.vid===vid))return;
   notifItems.unshift({vid,title,channel,thumb,avatar,ts:ts||Date.now(),unread:true});
   if(notifItems.length>50)notifItems=notifItems.slice(0,50);
   saveNotifItems();
@@ -214,7 +203,6 @@ function toggleProfileDropdown(){
   const dd=document.getElementById('profile-dropdown');
   dd.classList.toggle('open');
   if(dd.classList.contains('open')){
-    // Close when clicking outside
     setTimeout(()=>document.addEventListener('click',_closePDDOutside),0);
   }
 }
@@ -231,12 +219,10 @@ function _closePDDOutside(e){
 // ── SIDEBAR TOGGLE ──
 (function(){
   const LS_SB='yt_sidebar_collapsed_v1';
-  // Collapsed state is restored in initSetup after unlock check
   window._sbCollapsedPref = localStorage.getItem(LS_SB)==='1';
   window.toggleSidebar=function(){
     const collapsed=document.body.classList.toggle('sidebar-collapsed');
     localStorage.setItem(LS_SB,collapsed?'1':'0');
-    // Force GPU layer during transition for smoothness
     const sidebar=document.getElementById('sidebar');
     const main=document.getElementById('main');
     sidebar.style.willChange='width,opacity,transform';
@@ -265,7 +251,7 @@ function openManageChannels(){
     list.innerHTML=channels.map(c=>{
       const meta=channelMeta[c];
       const initials=(meta?.title||c).split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
-      return`<div class="mcp-item" onclick="closeManageChannels();openChannel('${esc(c).replace(/'/g,"\\'")}')" style="cursor:pointer">
+      return`<div class="mcp-item" onclick="closeManageChannels();openChannel('${esc(c).replace(/'/g,"\\'")}')}" style="cursor:pointer">
         <div class="mcp-avatar">${meta?.thumb?`<img src="${esc(meta.thumb)}" alt="" onerror="this.style.display='none'"/><span style="display:none">${esc(initials)}</span>`:`<span>${esc(initials)}</span>`}</div>
         <div class="mcp-info">
           <div class="mcp-name">${esc(meta?.title||c)}</div>
@@ -296,3 +282,46 @@ function unsubscribeChannel(chName,btn){
 }
 
 // ── CONTINUE WATCHING ──
+
+// ══════════════════════════════════════════════════
+// URL ROUTING
+// Makes URLs like /history /watchlater /playlists
+// work like a real website — professional! 🚀
+// ══════════════════════════════════════════════════
+
+const SECTION_URLS = {
+  home:        '/',
+  history:     '/history',
+  watchlater:  '/watchlater',
+  myplaylists: '/playlists',
+  search:      '/search',
+};
+
+function updateURL(section) {
+  const path = SECTION_URLS[section] || '/';
+  if (window.location.pathname !== path) {
+    history.pushState({ section }, '', path);
+  }
+}
+
+// Browser back/forward buttons work correctly
+window.addEventListener('popstate', (e) => {
+  const section = e.state?.section || 'home';
+  if (section === 'home') goHome();
+  else showSection(section);
+});
+
+// On page load, read URL and go to correct section
+(function handleInitialURL() {
+  const path = window.location.pathname.replace(/^\//, '');
+  const sectionMap = {
+    'history':    'history',
+    'watchlater': 'watchlater',
+    'playlists':  'myplaylists',
+    'search':     'search',
+  };
+  const section = sectionMap[path];
+  if (section) {
+    window.addEventListener('app-ready', () => showSection(section), { once: true });
+  }
+})();

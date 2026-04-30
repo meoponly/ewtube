@@ -89,3 +89,13 @@ if (document.readyState === 'loading') {
 } else {
   loadApp();
 }
+
+// ── GitHub Pages 404 redirect handler ──
+// 404.html redirects /?r=/history → we restore /history cleanly
+(function handleGHPagesRedirect() {
+  const params = new URLSearchParams(window.location.search);
+  const redirect = params.get('r');
+  if (redirect) {
+    history.replaceState(null, '', redirect);
+  }
+})();

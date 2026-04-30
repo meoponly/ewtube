@@ -1115,6 +1115,7 @@ function renderSidebarChannels(){
 function showSection(s){
   const displaySection=s==='home'?'search':s;
   currentSection=displaySection;
+  if(typeof updateURL==='function') updateURL(s);
   ['search-section','history-section','myplaylists-section','watchlater-section'].forEach(id=>{
     const el=document.getElementById(id);if(el)el.style.display='none';
   });

@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script>
+  // GitHub Pages 404 trick — redirect to index.html with the path as a query param
+  const path = window.location.pathname;
+  window.location.replace('/?r=' + encodeURIComponent(path));
+</script>
+</head>
+<body></body>
+</html>
