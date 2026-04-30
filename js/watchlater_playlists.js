@@ -47,7 +47,6 @@ function toggleChNotif(e,chName){
 
 // ── INIT ──
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeCtx();hideNewPlaylistModal();closeSettings();closeShortcuts()}})
-initSetup();;
 
 // Ctrl+B → open description panel for the card under the pointer
 let _hoveredCard=null;
@@ -98,12 +97,14 @@ document.addEventListener('click',e=>{
 
 // Ctrl+I → open Settings only when pointer is on the settings item
 let _hoveringSettingsItem=false;
-document.addEventListener('DOMContentLoaded',()=>{
+
+// Called by loader.js AFTER html partials are injected into DOM
+function reattachHoverListeners(){
   const el=document.getElementById('settings-dd-item');
   if(!el)return;
   el.addEventListener('mouseenter',()=>_hoveringSettingsItem=true);
   el.addEventListener('mouseleave',()=>_hoveringSettingsItem=false);
-});
+}
 document.addEventListener('keydown',e=>{
   if(e.key==='i'&&e.ctrlKey&&!e.shiftKey&&_hoveringSettingsItem){
     e.preventDefault();

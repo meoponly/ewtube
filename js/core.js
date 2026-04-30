@@ -1149,3 +1149,13 @@ function showSection(s){
 }
 
 // ── HOME ──
+
+// ── GLOBAL EXPORTS for HTML onclick attributes ──
+window.openSettings         = openSettings;
+window.closeSettings        = closeSettings;
+window.showSection          = showSection;
+window.openMyPlaylist       = openMyPlaylist;
+window.showNewPlaylistModal = showNewPlaylistModal;
+window.hideNewPlaylistModal = hideNewPlaylistModal;
+window.clearSearch          = clearSearch;
+window.closeCtx             = closeCtx;

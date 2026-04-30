@@ -251,7 +251,7 @@ function openManageChannels(){
     list.innerHTML=channels.map(c=>{
       const meta=channelMeta[c];
       const initials=(meta?.title||c).split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
-      return`<div class="mcp-item" onclick="closeManageChannels();openChannel('${esc(c).replace(/'/g,"\\'")}')}" style="cursor:pointer">
+      return`<div class="mcp-item" onclick="closeManageChannels();openChannel('${esc(c).replace(/'/g,"\\'")}')" style="cursor:pointer">
         <div class="mcp-avatar">${meta?.thumb?`<img src="${esc(meta.thumb)}" alt="" onerror="this.style.display='none'"/><span style="display:none">${esc(initials)}</span>`:`<span>${esc(initials)}</span>`}</div>
         <div class="mcp-info">
           <div class="mcp-name">${esc(meta?.title||c)}</div>
@@ -282,3 +282,16 @@ function unsubscribeChannel(chName,btn){
 }
 
 // ── CONTINUE WATCHING ──
+
+// ── GLOBAL EXPORTS ──
+// These are called from onclick in HTML partials so must be on window
+window.toggleNotifPanel       = toggleNotifPanel;
+window.closeNotifPanel        = closeNotifPanel;
+window.toggleProfileDropdown  = toggleProfileDropdown;
+window.closeProfileDropdown   = closeProfileDropdown;
+window.toggleYouSection       = toggleYouSection;
+window.openManageChannels     = openManageChannels;
+window.closeManageChannels    = closeManageChannels;
+window.unsubscribeChannel     = unsubscribeChannel;
+window.toggleTheme            = window.toggleTheme || toggleTheme;
+window.goHome                 = goHome;

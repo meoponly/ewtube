@@ -58,27 +58,19 @@ function bootApp() {
   const light = localStorage.getItem('yt_light_mode') === '1';
   if (light) document.body.classList.add('light-mode');
 
-  // Render home feed
-  if (typeof renderHome === 'function') renderHome();
-
   // Set up search input listeners
   if (typeof setupSearchInput === 'function') setupSearchInput();
 
-  // Render history
-  if (typeof renderHistory === 'function') {
-    const saved = JSON.parse(localStorage.getItem('yt_history_v1') || '[]');
-    renderHistory(saved);
-  }
+  // initSetup handles: sidebar render, channel resolve, showSection('home') → renderHome()
+  // This must run AFTER DOM partials are injected, which is now guaranteed since bootApp
+  // is called from loadApp() after root.innerHTML is populated.
+  if (typeof initSetup === 'function') initSetup();
 
-  // Render watch later
-  if (typeof renderWatchLater === 'function') renderWatchLater();
+  // Fire app-ready so router and other listeners can navigate
+  window.dispatchEvent(new Event('app-ready'));
 
-  // Render my playlists
-  if (typeof renderMyPlaylists === 'function') renderMyPlaylists();
-
-  // Apply sidebar collapse state
-  const collapsed = localStorage.getItem('yt_sidebar_collapsed') === '1';
-  if (collapsed) document.body.classList.add('sidebar-collapsed');
+  // Re-attach hover listeners that need DOM (Ctrl+I etc)
+  if (typeof reattachHoverListeners === 'function') reattachHoverListeners();
 
   console.log('[loader] ✅ App booted successfully');
 }
